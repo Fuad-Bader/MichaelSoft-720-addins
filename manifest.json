@@ -1,0 +1,154 @@
+{
+  "$schema": "https://raw.githubusercontent.com/OfficeDev/microsoft-teams-app-schema/preview/DevPreview/MicrosoftTeams.schema.json#",
+  "manifestVersion": "devPreview",
+  "version": "1.0.0.0",
+  "id": "ef88844c-e276-4898-9650-1591713e9bf9",
+  "localizationInfo": {
+    "defaultLanguageTag": "en-us"
+  },
+  "developer": {
+    "name": "KayanHR",
+    "websiteUrl": "https://www.kayanhr.com/help",
+    "privacyUrl": "https://www.kayanhr.com/help",
+    "termsOfUseUrl": "https://www.kayanhr.com/help"
+  },
+  "name": {
+    "short": "KayanHR",
+    "full": "KayanHR"
+  },
+  "description": {
+    "short": "KayanHR Microsoft 365 Add in.",
+    "full": "KayanHR Microsoft 365 Add in."
+  },
+  "icons": {
+    "outline": "assets/kayanicon32.png",
+    "color": "assets/kayanicon-0.png"
+  },
+  "accentColor": "#230201",
+  "validDomains": ["https://www.kayanhr.com", "https://localhost:3000"],
+  "showLoadingIndicator": false,
+  "isFullScreen": false,
+  "defaultBlockUntilAdminAction": false,
+  "authorization": {
+    "permissions": {
+      "resourceSpecific": [
+        {
+          "name": "MailboxItem.ReadWrite.User",
+          "type": "Delegated"
+        }
+      ]
+    }
+  },
+  "extensions": [
+    {
+      "requirements": {
+        "capabilities": [
+          {
+            "name": "Mailbox",
+            "minVersion": "1.1"
+          }
+        ],
+        "scopes": ["mail"]
+      },
+      "runtimes": [
+        {
+          "requirements": {
+            "capabilities": [
+              {
+                "name": "Mailbox",
+                "minVersion": "1.5"
+              }
+            ],
+            "formFactors": ["desktop"]
+          },
+          "id": "runtime_1",
+          "type": "general",
+          "code": {
+            "page": "https://localhost:3000/commands.html"
+          },
+          "lifetime": "short"
+        },
+        {
+          "requirements": {
+            "capabilities": [
+              {
+                "name": "Mailbox",
+                "minVersion": "1.5"
+              }
+            ]
+          },
+          "id": "runtime_2",
+          "type": "general",
+          "code": {
+            "page": "https://localhost:3000/taskpane.html"
+          },
+          "lifetime": "short",
+          "actions": [
+            {
+              "id": "action_1",
+              "type": "openPage",
+              "displayName": "action_1",
+              "pinnable": false,
+              "view": "view_1"
+            }
+          ]
+        }
+      ],
+      "ribbons": [
+        {
+          "requirements": {
+            "capabilities": [
+              {
+                "name": "Mailbox",
+                "minVersion": "1.5"
+              }
+            ],
+            "scopes": ["mail"],
+            "formFactors": ["desktop"]
+          },
+          "contexts": ["mailCompose", "mailRead", "meetingDetailsAttendee", "meetingDetailsOrganizer"],
+          "tabs": [
+            {
+              "builtInTabId": "TabDefault",
+              "groups": [
+                {
+                  "id": "msgComposeGroup",
+                  "label": "KayanHR Add-in",
+                  "controls": [
+                    {
+                      "id": "msgComposeOpenPaneButton",
+                      "type": "button",
+                      "label": "KayanHR",
+                      "icons": [
+                        {
+                          "size": 16,
+                          "url": "https://localhost:3000/assets/kayanicon16.ico"
+                        },
+                        {
+                          "size": 32,
+                          "url": "https://localhost:3000/assets/kayanicon32.ico"
+                        },
+                        {
+                          "size": 80,
+                          "url": "https://localhost:3000/assets/kayanicon80.ico"
+                        }
+                      ],
+                      "supertip": {
+                        "title": "KayanHR",
+                        "description": "Opens KayanHR."
+                      },
+                      "actionId": "action_1",
+                      "overriddenByRibbonApi": false,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "audienceClaimUrl": "https://localhost:3000/taskpane.html"
+    }
+  ]
+}
