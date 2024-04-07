@@ -3,6 +3,10 @@ import { createRoot } from "react-dom/client";
 import App from "./components/App";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 
+/**
+ * The initialize function must be run each time a new page is loaded.
+ */
+
 /* global document, Office, module, require */
 
 const title = "KayanHR Task Pane Add-in";
