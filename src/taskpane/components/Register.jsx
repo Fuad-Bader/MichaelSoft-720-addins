@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "../../api/axios";
 // import type { FieldProps } from "@fluentui/react-components";
-import { Field, Input } from "@fluentui/react-components";
+import { Field, Input, Button, Card, CardHeader } from "@fluentui/react-components";
 import { InfoLabel } from "@fluentui/react-components";
 
 const USER_REGEX = /^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$/;
@@ -100,15 +98,17 @@ const Register = () => {
           </p>
         </section>
       ) : (
-        <section>
-          <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
-            {errMsg}
-          </p>
-          <center>
-            <h1>Register</h1>
-          </center>
+        <Card>
+          <CardHeader
+            header={
+              <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+                {errMsg}
+                <h1>Register</h1>
+              </p>
+            }
+          />
           <form onSubmit={handleSubmit}>
-            <Field label="User Name" validationState="success" validationMessage="This is a success message.">
+            <Field label="Email" validationState={validName ? "success" : "error"} required>
               <Input
                 type="text"
                 id="username"
@@ -117,32 +117,25 @@ const Register = () => {
                 onChange={(e) => setUser(e.target.value)}
                 value={user}
                 required
-                aria-invalid={validName ? "false" : "true"}
-                aria-describedby="uidnote"
+                // aria-invalid={validName ? "false" : "true"}
+                // aria-describedby="uidnote"
                 onFocus={() => setUserFocus(true)}
                 onBlur={() => setUserFocus(false)}
               />
             </Field>
-            <InfoLabel
-              info={
-                <>
-                  The Username must be 4 to 24 characters and must begin with a letter, Letters, numbers, underscores,
-                  hyphens allowed.
-                </>
-              }
-            ></InfoLabel>
+            <InfoLabel info={<>Enter a valid email address. For example: johndoe@example.com.</>}></InfoLabel>
 
-            <Field label="Password" validationState="success" validationMessage="This is a success message.">
+            <Field label="Password" validationState={validPwd ? "success" : "error"} required>
               <Input
                 type="password"
                 id="password"
                 onChange={(e) => setPwd(e.target.value)}
                 value={pwd}
-                required
-                aria-invalid={validPwd ? "false" : "true"}
-                aria-describedby="pwdnote"
-                onFocus={() => setPwdFocus(true)}
-                onBlur={() => setPwdFocus(false)}
+                // required
+                // aria-invalid={validPwd ? "false" : "true"}
+                // aria-describedby="pwdnote"
+                // onFocus={() => setPwdFocus(true)}
+                // onBlur={() => setPwdFocus(false)}
               />
             </Field>
             <InfoLabel
@@ -154,12 +147,7 @@ const Register = () => {
               }
             ></InfoLabel>
 
-            <label htmlFor="confirm_pwd">
-              Confirm Password:
-              <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
-              <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
-            </label>
-            <Field label="Password" validationState="success" validationMessage="This is a success message.">
+            <Field label="Confirm Password" validationState={validMatch ? "success" : "error"} required>
               <Input
                 type="password"
                 id="confirm_pwd"
@@ -172,22 +160,21 @@ const Register = () => {
                 onBlur={() => setMatchFocus(false)}
               />
             </Field>
-            <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
-              <FontAwesomeIcon icon={faInfoCircle} />
-              Must match the first password input field.
-            </p>
-
-            <button disabled={!validName || !validPwd || !validMatch ? true : false}>Sign Up</button>
+            <InfoLabel info={<>Must match the first password input field.</>}></InfoLabel>
+            <br />
+            <Button appearance="primary" disabled={!validName || !validPwd || !validMatch ? true : false}>
+              Sign Up
+            </Button>
           </form>
           <p>
             Already registered?
             <br />
             <span className="line">
               {/*put router link here*/}
-              <a href="#">Sign In</a>
+              <Button appearance="transparent">Sign in</Button>
             </span>
           </p>
-        </section>
+        </Card>
       )}
     </>
   );
