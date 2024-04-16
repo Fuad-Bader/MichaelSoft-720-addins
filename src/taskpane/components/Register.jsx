@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "../../api/axios";
-// import type { FieldProps } from "@fluentui/react-components";
 import {
   Field,
   Input,
@@ -9,11 +8,18 @@ import {
   CardHeader,
   InfoLabel,
   makeStyles,
-  CardPreview,
+  Dialog,
+  DialogActions,
+  DialogSurface,
+  DialogBody,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
 } from "@fluentui/react-components";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
-const USER_REGEX = /^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$/;
+const USER_REGEX =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = "/api/Account/Authentication";
 
@@ -36,15 +42,15 @@ const Register = () => {
 
   const [user, setUser] = useState("");
   const [validName, setValidName] = useState(true);
-  const [userFocus, setUserFocus] = useState(false);
+  // const [userFocus, setUserFocus] = useState(false);
 
   const [pwd, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(true);
-  const [pwdFocus, setPwdFocus] = useState(false);
+  // const [pwdFocus, setPwdFocus] = useState(false);
 
   const [matchPwd, setMatchPwd] = useState("");
   const [validMatch, setValidMatch] = useState(true);
-  const [matchFocus, setMatchFocus] = useState(false);
+  // const [matchFocus, setMatchFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
@@ -52,6 +58,16 @@ const Register = () => {
   const [response, setResponse] = useState("");
   const [responseData, setResponseData] = useState("");
   const [responseAccessToken, setResponseAccessToken] = useState("");
+
+  useEffect(() => {
+    userRef.current.focus();
+  }, []);
+
+  useEffect(() => {
+    setResponseData("");
+    setResponseAccessToken("");
+    setResponse("");
+  }, [user, pwd, matchPwd]);
 
   useEffect(() => {
     userRef.current.focus();
@@ -137,11 +153,6 @@ const Register = () => {
               </p>
             }
           />
-          {/* <CardPreview
-            logo={
-              <img src="https://images.unsplash.com/photo-1706707075372-29a7d1ba306f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
-            }
-          ></CardPreview> */}
           <form onSubmit={handleSubmit}>
             <Field
               label={{
@@ -149,7 +160,8 @@ const Register = () => {
                   <InfoLabel info="Enter a valid email address. For example: johndoe@example.com.">Email</InfoLabel>
                 ),
               }}
-              validationState={validName ? "success" : "none"}
+              validationState={user == "" ? "none" : validName ? "success" : "error"}
+              validationMessage={user == "" ? "" : validName ? "This email is suitable" : "The email is not valid"}
               required
             >
               <Input
@@ -157,14 +169,13 @@ const Register = () => {
                 id="username"
                 ref={userRef}
                 autoComplete="off"
-                onChange={(e) => setUser(e.target.value)}
+                onChange={(e) => {
+                  setUser(e.target.value);
+                }}
                 value={user}
                 placeholder="Enter your email address"
-                aria-invalid={validName ? "false" : "true"}
                 aria-describedby="uidnote"
                 required
-                onFocus={() => setUserFocus(true)}
-                onBlur={() => setUserFocus(false)}
               />
             </Field>
             <br />
@@ -180,20 +191,19 @@ const Register = () => {
                   </InfoLabel>
                 ),
               }}
-              validationState={validPwd ? "success" : "error"}
+              validationState={pwd == "" ? "none" : validPwd ? "success" : "error"}
+              validationMessage={pwd == "" ? "" : validPwd ? "" : "The Password does not meet the requirements"}
               required
             >
               <Input
                 type="password"
-                id="password"
-                onChange={(e) => setPwd(e.target.value)}
+                onChange={(e) => {
+                  setPwd(e.target.value);
+                  setValidPwd(PWD_REGEX.test(pwd));
+                }}
                 value={pwd}
                 placeholder="Enter your password"
                 required
-                aria-invalid={validPwd ? "false" : "true"}
-                aria-describedby="pwdnote"
-                onFocus={() => setPwdFocus(true)}
-                onBlur={() => setPwdFocus(false)}
               />
             </Field>
             <br />
@@ -204,24 +214,24 @@ const Register = () => {
                   <InfoLabel info="Must match the first password input field."> Confirm Password </InfoLabel>
                 ),
               }}
-              validationState={validMatch ? "success" : "error"}
+              validationState={matchPwd == "" ? "none" : validMatch ? "success" : "error"}
+              validationMessage={matchPwd == "" ? "" : validMatch ? "" : "Passwords do not match"}
               required
             >
               <Input
                 type="password"
-                id="confirm_pwd"
-                onChange={(e) => setMatchPwd(e.target.value)}
+                onChange={(e) => {
+                  setMatchPwd(e.target.value);
+                }}
                 value={matchPwd}
                 placeholder="Confirm your password"
                 required
-                aria-invalid={validMatch ? "false" : "true"}
-                aria-describedby="confirmnote"
-                onFocus={() => setMatchFocus(true)}
-                onBlur={() => setMatchFocus(false)}
               />
             </Field>
             <br />
-            <Button appearance="primary" disabled={!validName || !validPwd || !validMatch ? true : false} >Sign Up</Button>
+            <Button appearance="primary" disabled={!validName || !validPwd || !validMatch ? true : false}>
+              Sign Up
+            </Button>
             {/* <Button appearance="primary">Sign Up</Button> */}
           </form>
           <p>
@@ -230,6 +240,23 @@ const Register = () => {
             <span className="line">
               {/*put router link here*/}
               <Button appearance="transparent">Sign in</Button>
+              <Dialog>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button>Test Pop up</Button>
+                </DialogTrigger>
+                <DialogSurface>
+                  <DialogBody>
+                    <DialogTitle>Dialog title</DialogTitle>
+                    <DialogContent>This is a test confirmation dialog.</DialogContent>
+                    <DialogActions>
+                      <Button appearance="primary">Ok</Button>
+                      <DialogTrigger disableButtonEnhancement>
+                        <Button appearance="secondary">Close</Button>
+                      </DialogTrigger>
+                    </DialogActions>
+                  </DialogBody>
+                </DialogSurface>
+              </Dialog>
             </span>
           </p>
         </Card>

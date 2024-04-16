@@ -2,6 +2,7 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./components/App";
 import { FluentProvider, webLightTheme, webDarkTheme } from "@fluentui/react-components";
+import { CookiesProvider } from "react-cookie";
 
 /**
  * The initialize function must be run each time a new page is loaded.
@@ -19,15 +20,17 @@ const detectAndSetTheme = () => {
   const officeTheme = Office.context.officeTheme;
 
   // Determine the selected Fluent UI theme based on the Office theme
-  const selectedTheme = officeTheme.bodyBackgroundColor == "#262626" ? webDarkTheme : webLightTheme;
+  const selectedTheme = officeTheme.bodyBackgroundColor === "#262626" ? webDarkTheme : webLightTheme;
 
   // Set the theme
   root.render(
-    <FluentProvider theme={selectedTheme}>
-      <App title={title} />
-    </FluentProvider>
+    <CookiesProvider>
+      <FluentProvider theme={selectedTheme}>
+        <App title={title} />
+      </FluentProvider>
+    </CookiesProvider>
   );
-  setTimeout(detectAndSetTheme, 5000);
+  // setTimeout(detectAndSetTheme, 5000);
 };
 
 /* Render application after Office initializes */

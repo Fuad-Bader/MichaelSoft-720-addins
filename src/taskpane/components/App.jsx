@@ -1,7 +1,9 @@
 import * as React from "react";
 import PropTypes from "prop-types";
+// import Register from "./Register";
+import OTP from "./OTP";
+// import { useCookies } from "react-cookie";
 // import { makeStyles } from "@fluentui/react-components";
-import Register from "./Register";
 
 // const useStyles = makeStyles({
 //   root: {
@@ -11,12 +13,27 @@ import Register from "./Register";
 
 const App = () => {
   // const styles = useStyles();
+  // const cookies = useCookies(["user"]);
 
   return (
     <div>
-      <Register />
+      <OTP />
     </div>
   );
+
+  // if (cookies.user != null) {
+  //   return (
+  //     <div>
+  //       <Register />
+  //     </div>
+  //   );
+  // } else {
+  //   return (
+  //     <div>
+  //       <Register />
+  //     </div>
+  //   );
+  // }
 };
 
 App.propTypes = {
